@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <h1>STOPWATCH TASK 02</h1>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: black;
+            color: white;
+            margin-top: 50px;
+        }
+        #time {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        button {
+            font-size: 1em;
+            margin: 5px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="time">00:00</div>
+    <button onclick="startStopwatch()">Start</button>
+    <button onclick="pauseStopwatch()">Pause</button>
+    <button onclick="resetStopwatch()">Reset</button>
+    <button onclick="lapTime()">Lap</button>
+    <ul id="laps"></ul>
+
+    <script>
+        let timer, startTime, elapsedTime = 0, running = false;
+
+        function updateTime() {
+            const now = Date.now() - startTime + elapsedTime;
+            document.getElementById('time').textContent = 
+                new Date(now).toISOString().substr(14, 5);
+        }
+
+        function startStopwatch() {
+            if (!running) {
+                startTime = Date.now();
+                timer = setInterval(updateTime, 1000);
+                running = true;
+            }
+        }
+
+        function pauseStopwatch() {
+            if (running) {
+                clearInterval(timer);
+                elapsedTime += Date.now() - startTime;
+                running = false;
+            }
+        }
+
+        function resetStopwatch() {
+            clearInterval(timer);
+            elapsedTime = 0;
+            running = false;
+            document.getElementById('time').textContent = "00:00";
+            document.getElementById('laps').innerHTML = "";
+        }
+
+        function lapTime() {
+            if (running) {
+                const lapItem = document.createElement('li');
+                lapItem.textContent = document.getElementById('time').textContent;
+                document.getElementById('laps').appendChild(lapItem);
+            }
+        }
+    </script>
+</body>
+</html>
